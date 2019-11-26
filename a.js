@@ -25,6 +25,10 @@ let fs = require('fs');
 // console.log(mod.c);
 //mod();
 let http=require('http');
+//处理get传参
+let url=require('url');
+//处理post传参
+let querystring =require('querystring');
 http.createServer((req,res)=>{
     //在界面展示内容
     // res.write('index');
@@ -38,7 +42,20 @@ http.createServer((req,res)=>{
     //         res.end(data);
     //     }
     // })
-    console.log(req.url);
+    //get传值拼接在url后
+    //console.log(url.parse(req.url,true));
+    //console.log(url.parse(req.url,true).query);
+    let result=[];
+    //当post获取到传输每条数据时
+    req.on('data',buffer=>{
+        result.push(buffer);
+        console.log(buffer);
+    })
+    //传输完成时
+    req.on('end',()=>{
+        let data=Buffer.concat(result).toString();
+        console.log(querystring.parse(data));
+    })
 }).listen(8888);
 
 
